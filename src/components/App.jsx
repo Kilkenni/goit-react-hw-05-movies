@@ -1,5 +1,8 @@
 import { Route, Routes } from "react-router-dom";
+
+import NavBar from "./NavBar";
 import HomePage from "./HomePage";
+import MoviesPage from "./MoviesPage";
 
 export const App = () => {
   return (
@@ -14,13 +17,11 @@ export const App = () => {
         color: '#010101',
       }}
     >
-      React homework #05 Movie search (React Router)
+      <NavBar/>
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route >
-          404 page not found
-        </Route>
+        <Route path="/movies/*" element={<MoviesPage />}/>
       </Routes>
     </div>
   );
