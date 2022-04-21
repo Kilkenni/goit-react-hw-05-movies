@@ -1,0 +1,11 @@
+.movieCard {
+  border: 1px solid black;
+
+  margin: 5px;
+  padding: 5px;
+}
+
+.movieTitle {
+  font-size: 20px;
+  line-height: 150%;
+}

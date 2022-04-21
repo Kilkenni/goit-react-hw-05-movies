@@ -94,16 +94,21 @@ class TmdbMovieReviews extends TmdbMovieGetSubdata {
 class TmdbImage extends TmdbGetMethod {
     TMDB_API_ENTRY = "";
 
-    constructor(TMDB_API_ENTRY_secure, size = "original", file_path) {
+    constructor(TMDB_API_ENTRY_secure, size = "original", file_path = "") {
         super();
         this.TMDB_API_ENTRY = TMDB_API_ENTRY_secure;
         this.size = size;
         this.file_path = file_path;
     }
 
+    getImage(file_path) {
+        this.file_path = file_path;
+        return this.toString();
+    }
+
     toString() {
         //example: https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg
-        return this.TMDB_API_ENTRY + this.size + this.file_path;
+        return this.file_path ? this.TMDB_API_ENTRY + this.size + this.file_path : "";
     }   
 }
 
@@ -139,6 +144,15 @@ class TmdbSearch extends TmdbGetMethod {
         this.TMDB_API_PARAMS.query = TmdbSearch.#sanitizeString(queryString);
         this.TMDB_API_PARAMS.page = page;
         this.TMDB_API_PARAMS.language = language;
+    }
+
+    toString() {
+        if (this.TMDB_API_PARAMS.query === "") {
+            throw new Error("TmdbSearch: query string is empty");
+        }
+        else {
+            return super.toString.call(this);
+        }
     }
 }
 
@@ -251,6 +265,9 @@ export class TmdbApiService {
             return data.json();
         }
         catch (error) {
+            if (error.message === "TmdbSearch: query string is empty") { 
+                return null;
+            }
             //console.error("Axios request error");
             console.log(error);
         }
