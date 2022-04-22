@@ -1,19 +1,24 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
+import { SpinnerDotted } from "spinners-react";
 
 import NavBar from "./NavBar";
-import HomePage from "./HomePage";
-import MoviesPage from "./MoviesPage";
-import MovieDetailsPage from "./MovieDetailsPage";
-import Cast from "./Cast";
-import Reviews from "./Reviews";
-
 import { TmdbApiService } from "js/TMDBApiService";
+
+const HomePage = lazy(() => {
+  return import("./HomePage" /* webpackChunkName: "home-page" */);
+});
+const MoviesPage = lazy(() => import("./MoviesPage" /* webpackChunkName: "movies-page" */) );
+const MovieDetailsPage = lazy(() => {
+  return import("./MovieDetailsPage" /* webpackChunkName: "movie-details-page" */);
+});
+const Cast = lazy(() => import("./Cast" /* webpackChunkName: "cast-subpage"*/));
+const Reviews = lazy(() => {
+  return import("./Reviews" /* webpackChunkName: "reviews-subpage"*/);
+});
 
 export const App = () => {
   const [apiConfig, setApiConfig] = useState(undefined);
-
-
 
   useEffect(() => {
     if (apiConfig !== undefined) {
@@ -35,8 +40,6 @@ export const App = () => {
     return function abortFetch() {
         ApiConfigHandler.abortFetch();
     }
-
-    
   }, [apiConfig])
 
   return (
@@ -57,25 +60,41 @@ export const App = () => {
         <Route
           path="/"
           element={
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<SpinnerDotted size={100} color={ "red"}/>}>
               <HomePage apiBaseUrl={apiConfig.images.secure_base_url} />
             </Suspense>        
           }
         />
         <Route
           path="/movies"
-          element={<MoviesPage apiBaseUrl={apiConfig.images.secure_base_url} />}
+          element={
+            <Suspense fallback={<SpinnerDotted size={100} color={ "red"}/>}>
+              <MoviesPage apiBaseUrl={apiConfig.images.secure_base_url} />
+            </Suspense>
+          }
         />
         <Route
           path="/movies/:movieID"
-          element={<MovieDetailsPage apiBaseUrl={apiConfig.images.secure_base_url} />}        
+          element={
+            <Suspense fallback={<SpinnerDotted size={100} color={ "red"}/>}>
+              <MovieDetailsPage apiBaseUrl={apiConfig.images.secure_base_url} />
+            </Suspense>
+          }        
         >
           <Route
             path="/movies/:movieID/cast"
-            element={<Cast apiBaseUrl={apiConfig.images.secure_base_url} />} />
+            element={
+              <Suspense fallback={<SpinnerDotted size={100} color={ "red"}/>}>
+                <Cast apiBaseUrl={apiConfig.images.secure_base_url} />
+              </Suspense>
+            } />
           <Route
             path="/movies/:movieID/reviews"
-            element={<Reviews apiBaseUrl={apiConfig.images.secure_base_url} />} />
+            element={
+              <Suspense fallback={<SpinnerDotted size={100} color={ "red"}/>}>
+                <Reviews apiBaseUrl={apiConfig.images.secure_base_url} />
+              </Suspense>
+            } />
         </Route>
         {/* default path, page 404 should be here. Redirecting to home as per task */}
         <Route

@@ -1,4 +1,4 @@
-//import axios from "axios";
+import axios from "axios";
 
 /* Class TMDB_handler is abstract. Instances of this class can't be created. However, any classes extending this one can (unless they are abstract, too) - and will inherit its fields and methods.
 Essentially, it's a way to describe common methods for several classes in one place. */
@@ -261,12 +261,15 @@ export class TmdbApiService {
         const signal = this.#fetchController.signal;
 
         try {
-            const data = await fetch(this.toString(), { signal });
+            const response = await axios.get(this.toString(), { signal });
             //return await axios.get(this.toString());
-            return data.json();
+            //return response.json();
+            if (response && response.statusText === "OK") {
+                return response.data;
+            }
         }
         catch (error) {
-            if (error.message === "TmdbSearch: query string is empty") { 
+            if ((error.message === "TmdbSearch: query string is empty") || (error.message === "canceled")) { 
                 return null;
             }
             //console.error("Axios request error");

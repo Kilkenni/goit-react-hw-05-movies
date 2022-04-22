@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import { TmdbApiService } from "../../js/TMDBApiService";
 //import useFetchFromApi from "hooks/useFetchFromApi";
-import MoviesList from "components/MoviesList";
+import MoviesList from "../MoviesList";
 //import style from "./MoviesPage.module.css"
 
 

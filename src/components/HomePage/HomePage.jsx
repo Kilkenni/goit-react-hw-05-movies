@@ -4,7 +4,7 @@ import { SpinnerDotted } from "spinners-react";
 import PropTypes from "prop-types";
 
 //import style from "./HomePage.module.css";
-import MoviesList from "components/MoviesList";
+import MoviesList from "../MoviesList";
 //import { TmdbApiService } from "../../js/TMDBApiService";
 import useFetch_Page from "hooks/useFetch_Page";
 
