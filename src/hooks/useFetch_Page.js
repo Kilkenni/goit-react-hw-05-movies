@@ -5,8 +5,9 @@ import { TmdbApiService } from "js/TMDBApiService";
 //Custom hook for fetching data from TMDB (except config!)
 //for acceptable handlers and parameters see TMDBApiService
 
-export default function useFetchFromApi(handler, handlerParams) {
+export default function useFetch_Page(handler, page) {
   const [state, setState] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     //do once
@@ -14,18 +15,30 @@ export default function useFetchFromApi(handler, handlerParams) {
       return;
     }
 
-    const ApiHandler = new TmdbApiService(handler, handlerParams);
+    const ApiHandler = new TmdbApiService(handler, {
+      page: page,
+    });
 
     async function fetchFromApi() {
       //console.log(ApiHandler.toString())
-      const data = await ApiHandler.fetchData();
-      if (data) {
+
+      setIsLoading(true);
+      try {
+        const data = await ApiHandler.fetchData();
+        if (data) {
           //console.log(data)
           setState(data);
+        }
+        else {
+          throw new Error(`Fetched data is ${data}`);
+        }
       }
-      // else {
-      //   console.log(`Oops. Fetched data is ${data}`)
-      // }
+      catch (error) {
+          //console.log(error.message);        
+      }      
+      finally {
+          setIsLoading(false);
+      }
     }
 
     fetchFromApi();
@@ -33,7 +46,7 @@ export default function useFetchFromApi(handler, handlerParams) {
     return function abortFetch() {
       ApiHandler.abortFetch();
     }
-  }, [state, handler, handlerParams]);
+  }, [state, handler, page]);
 
-  return state; 
+  return [state, isLoading]; 
 }

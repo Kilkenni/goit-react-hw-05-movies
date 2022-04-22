@@ -13,6 +13,9 @@ export default function MoviesList({ movieDataArray, apiBaseUrl }) {
     });
 
   return (<ul>
+    {movieDataArray.length === 0 && <p>
+      No movies found for this query.
+    </p>}
     {movieDataArray.map((movie) => {
       return (<li key={movie.id}>
         <Link to={`/movies/${movie.id}`}>

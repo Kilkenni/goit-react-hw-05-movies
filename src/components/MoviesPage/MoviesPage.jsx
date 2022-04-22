@@ -10,20 +10,18 @@ import MoviesList from "components/MoviesList";
 
 export default function MoviesPage({ apiBaseUrl }) {
   const [inputString, setInputString] = useState("");
-  //const [searchString, setSearchString] = useState("");
-  //const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchResults, setSearchResults] = useState(undefined);
+
+  const page = searchParams.get("page");
+  const query = searchParams.get("query");
  
   useEffect(() => {
     //we do not search for empty query
-    if (!searchParams.get("query") || searchParams.get("query").length === 0) {
+    if (!query || query.length === 0) {
       return;
     }
-
-    const page = searchParams.get("page");
-    const query = searchParams.get("query");
 
     const ApiHandler = new TmdbApiService("TMDB_search", {
       queryString: query,
@@ -43,7 +41,7 @@ export default function MoviesPage({ apiBaseUrl }) {
     return function abortFetch() {
         ApiHandler.abortFetch();
     }      
-  }, [searchParams]);
+  }, [query, page]);
 
   const onNewSearch = (event) => {
     event.preventDefault();

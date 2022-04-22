@@ -85,10 +85,11 @@ class TmdbMovieCredits extends TmdbMovieGetSubdata {
 class TmdbMovieReviews extends TmdbMovieGetSubdata {
     TMDB_API_ENDPOINT = "/reviews";
 
-    constructor(movie_id, language = "") {
+    constructor(movie_id, page = 1, language = "") {
         super(movie_id, language);
+        this.TMDB_API_PARAMS.page = page;
     }
-    //example: https://api.themoviedb.org/3/movie/{movie_id}/reviews?api_key=<<api_key>>&language=en-US
+    //example: hhttps://api.themoviedb.org/3/movie/{movie_id}/reviews?api_key=<<api_key>>&language=en-US&page=1
 }
 
 class TmdbImage extends TmdbGetMethod {
@@ -222,8 +223,8 @@ export class TmdbApiService {
                 break;
             }
             case "TMDB_movieReviews": {
-                const { movie_id, language } = handlerParameters;
-                this.handler = new TmdbMovieReviews(movie_id, language);
+                const { movie_id, page, language } = handlerParameters;
+                this.handler = new TmdbMovieReviews(movie_id, page, language);
                 break;
             }
             case "TMDB_genres": {
@@ -269,7 +270,7 @@ export class TmdbApiService {
                 return null;
             }
             //console.error("Axios request error");
-            console.log(error);
+            console.error(error);
         }
     }
 

@@ -5,6 +5,8 @@ import NavBar from "./NavBar";
 import HomePage from "./HomePage";
 import MoviesPage from "./MoviesPage";
 import MovieDetailsPage from "./MovieDetailsPage";
+import Cast from "./Cast";
+import Reviews from "./Reviews";
 
 import { TmdbApiService } from "js/TMDBApiService";
 
@@ -67,7 +69,14 @@ export const App = () => {
         <Route
           path="/movies/:movieID"
           element={<MovieDetailsPage apiBaseUrl={apiConfig.images.secure_base_url} />}        
-        />
+        >
+          <Route
+            path="/movies/:movieID/cast"
+            element={<Cast apiBaseUrl={apiConfig.images.secure_base_url} />} />
+          <Route
+            path="/movies/:movieID/reviews"
+            element={<Reviews apiBaseUrl={apiConfig.images.secure_base_url} />} />
+        </Route>
         {/* default path, page 404 should be here. Redirecting to home as per task */}
         <Route
           path="*"
