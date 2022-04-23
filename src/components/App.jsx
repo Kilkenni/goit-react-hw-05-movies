@@ -17,30 +17,60 @@ const Reviews = lazy(() => {
   return import("./Reviews" /* webpackChunkName: "reviews-subpage"*/);
 });
 
-export const App = () => {
-  const [apiConfig, setApiConfig] = useState(undefined);
+function useFetchNoParams(fetchType) {
+  const [state, setState] = useState(undefined);
 
   useEffect(() => {
-    if (apiConfig !== undefined) {
+    if (state !== undefined) {
       return;
     }
 
-    const ApiConfigHandler = new TmdbApiService("TMDB_config");
+    const ApiConfigHandler = new TmdbApiService(fetchType);
 
-    async function fetchFromApi() {  
-        const data = await ApiConfigHandler.fetchData();
-        if (data) {
-            //console.log(data)
-            setApiConfig(data);
-        }        
+    async function fetchFromApi() {
+      const data = await ApiConfigHandler.fetchData();
+      if (data) {
+        //console.log(data)
+        setState(data);
+      }
     }
 
     fetchFromApi();
 
     return function abortFetch() {
-        ApiConfigHandler.abortFetch();
+      ApiConfigHandler.abortFetch();
     }
-  }, [apiConfig])
+  }, [state, fetchType]);
+
+  return state;
+}
+
+export const App = () => {
+  const apiConfig = useFetchNoParams("TMDB_config");
+  const genreConfig = useFetchNoParams("TMDB_genres");
+  const genres = genreConfig ? genreConfig.genres : undefined;
+
+  // useEffect(() => {
+  //   if (apiConfig !== undefined) {
+  //     return;
+  //   }
+
+  //   const ApiConfigHandler = new TmdbApiService("TMDB_config");
+
+  //   async function fetchFromApi() {  
+  //       const data = await ApiConfigHandler.fetchData();
+  //       if (data) {
+  //           //console.log(data)
+  //           setApiConfig(data);
+  //       }        
+  //   }
+
+  //   fetchFromApi();
+
+  //   return function abortFetch() {
+  //       ApiConfigHandler.abortFetch();
+  //   }
+  // }, [apiConfig])
 
   return (
     <div
@@ -77,7 +107,7 @@ export const App = () => {
           path="/movies/:movieID"
           element={
             <Suspense fallback={<SpinnerDotted size={100} color={ "red"}/>}>
-              <MovieDetailsPage apiBaseUrl={apiConfig.images.secure_base_url} />
+              <MovieDetailsPage apiBaseUrl={apiConfig.images.secure_base_url} genresArray={ genres}/>
             </Suspense>
           }        
         >

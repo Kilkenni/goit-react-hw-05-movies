@@ -8,12 +8,11 @@ import MoviesList from "../MoviesList";
 //import { TmdbApiService } from "../../js/TMDBApiService";
 import useFetch_Page from "hooks/useFetch_Page";
 
-
 export default function HomePage({ apiBaseUrl }) {
     const [ trends, isLoading ] = useFetch_Page("TMDB_trending", 1);
 
     return (<section>
-        <h2>Trending movies:</h2>  
+        <h2>Trending movies for this week:</h2>  
         <SpinnerDotted enabled={isLoading} size={100} color={ "red"}/>
         {trends && <MoviesList
             movieDataArray={trends.results}
