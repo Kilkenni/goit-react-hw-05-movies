@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/movies-page.f5602990.chunk.css","mappings":"AAAA,4BAEE,UAAW,CACX,WACF,CAEA,6BACE,cAAe,CACf,gBACF","sources":["components/MovieCard/MovieCard.module.css"],"sourcesContent":[".movieCard {\n  /* border: 1px solid black; */\n  margin: 5px;\n  padding: 5px;\n}\n\n.movieTitle {\n  font-size: 20px;\n  line-height: 150%;\n}"],"names":[],"sourceRoot":""}
