@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { TmdbApiService } from "js/TMDBApiService";
 
@@ -8,6 +9,7 @@ import { TmdbApiService } from "js/TMDBApiService";
 export default function useFetch_Id_Lang(handler, movie_id, language) {
   const [state, setState] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(undefined);
 
   useEffect(() => {
     //do once
@@ -26,28 +28,31 @@ export default function useFetch_Id_Lang(handler, movie_id, language) {
       setIsLoading(true);
       try {
         const data = await ApiHandler.fetchData();
-        if (data) {
+        if (data === -404) {
+          setError(404);
+        }
+        else if (data) {
           //console.log(data)
           setState(data);
         }
         else {
-          throw new Error(`Fetched data is ${data}`);
+          //throw new Error(`Fetched data is ${data}`);
         }
       }
       catch (error) {
-          //console.log(error.message);        
+        console.log(error.message);                
       }      
       finally {
           setIsLoading(false);
       }
     }
 
-    fetchFromApi();
+    fetchFromApi();   
 
     return function abortFetch() {
       ApiHandler.abortFetch();
     }
   }, [state, handler, movie_id, language]);
 
-  return [state, isLoading]; 
+  return [state, isLoading, error]; 
 }

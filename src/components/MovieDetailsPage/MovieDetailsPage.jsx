@@ -1,13 +1,14 @@
-import { useParams, useLocation, Outlet, Link, useNavigate } from "react-router-dom";
+import { useParams, useLocation, Outlet, Link, useNavigate, Navigate } from "react-router-dom";
 import { SpinnerDotted } from "spinners-react";
 import PropTypes from "prop-types";
-//import { useState, useEffect } from "react";
+//import { useEffect } from "react";
 
 import useFetch_Id_Lang from "hooks/useFetch_Id_Lang";
 
+
 const MovieDetailsPage = ({apiBaseUrl}) => {
   const { movieID } = useParams();
-  const [movieData, isLoading ] = useFetch_Id_Lang("TMDB_movieData", movieID, undefined /* language: "en-US" */ ); 
+  const [movieData, isLoading, error] = useFetch_Id_Lang("TMDB_movieData", movieID, undefined /* language: "en-US" */);
 
   const currentLoc = useLocation().pathname;
   const moviePath = currentLoc.substring(0, currentLoc.indexOf(movieID) + movieID.length);
@@ -15,7 +16,9 @@ const MovieDetailsPage = ({apiBaseUrl}) => {
   const navigate = useNavigate();
 
   return (<div>
-    <button type="button" onClick={() => {return navigate(-1)}}>Go back</button>
+    <button type="button" onClick={() => { return navigate(-1) }}>Go back</button>
+    {error === 404 && <Navigate to="/" replace={true} />}
+
     <SpinnerDotted enabled={isLoading} size={100} color={ "red"}/>
     {movieData && <section>
       <h2>{movieData.title}</h2>

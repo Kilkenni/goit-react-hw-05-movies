@@ -273,7 +273,10 @@ export class TmdbApiService {
                 return null;
             }
             //console.error("Axios request error");
-            console.error(error);
+            if (error.message === "Request failed with status code 404") {
+                return -404;
+            }
+            console.error(error.message);
         }
     }
 
