@@ -264,7 +264,7 @@ export class TmdbApiService {
             const response = await axios.get(this.toString(), { signal });
             //return await axios.get(this.toString());
             //return response.json();
-            if (response && response.statusText === "OK") {
+            if (response && response.status === 200) {
                 return response.data;
             }
         }
